@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://hdfs01:3306/jobs?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+
+#\u6253\u5370SQL\u8BED\u53E5
+logging:
+  level:
+    com:
+      sulin:
+        jobweb:
+          mapper: debug
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.sulin.jobweb.bean

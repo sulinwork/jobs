@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.2</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="./css/font.css">
+		<link rel="stylesheet" href="./css/xadmin.css">
+		<link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+		<script src="./lib/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./js/xadmin.js"></script>
+
+	</head>
+
+	<body>
+		<div class="x-nav">
+			<span class="layui-breadcrumb">
+                <a href="index.html">首页</a>
+                <a>
+                    <cite>岗位信息查询</cite></a>
+            </span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+				<i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+			</a>
+		</div>
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-card">
+						<div class="layui-card-body ">
+
+							<div class="layui-input-inline layui-show-xs-block">
+								<input type="text" name="jobType" id="jobType" placeholder="请输入岗位关键字(java/python/大数据)" autocomplete="off" class="layui-input" style="width: 300px;"></div>
+							<div class="layui-input-inline layui-show-xs-block">
+								<button class="layui-btn" id="sreach" onclick="sreach()">
+                                        <i class="layui-icon">&#xe615;</i></button>
+							</div>
+
+						</div>
+
+						<div class="layui-card-body ">
+							<table class="layui-table layui-form">
+								<thead>
+									<tr>
+										<th>岗位名称</th>
+										<th>工作地点</th>
+										<th>公司名字</th>
+										<th>薪资待遇</th>
+										<th>学历</th>
+										<th>工作经验</th>
+										<th>发布日期</th>
+										<th>操作</th>
+								</thead>
+								<tbody id="put_data">
+
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div id="page" style="text-align: right;"></div>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+
+	<script src="./lib/layui/layui.all.js" charset="utf-8"></script>
+	<script>
+		var tableData;
+
+		var loadAllData = function(type) {
+			$.get("http://127.0.0.1:8080/Jobs/" + type).done(function(data) {
+				if(data.code == 200) {
+					layer.msg('加载数据成功');
+					tableData = data.data;
+					//加载20条数据放入表格
+					loadDataToTable(1);
+
+					laypage.render({
+						elem: 'page',
+						count: tableData.length/3,
+						jump: function(obj, first) {
+							if(!first) {
+								layer.msg('第 ' + obj.curr + ' 页');
+								loadDataToTable(obj.curr);
+							}
+
+						}
+					});
+				} else {
+					layer.msg('加载数据失败！' + data.msg);
+				}
+			})
+		}
+
+		var loadDataToTable = function(pageIndex) {
+			var startIndex = (pageIndex - 1) * 30;
+			var endIndex = startIndex + 30;
+			$("#put_data").empty(); //清空元素
+			console.info(startIndex);
+			console.info(endIndex);
+			for(var i = startIndex; i < endIndex; i++) {
+				var html = '<tr><td>' + tableData[i].jobName + '</td><td>' + tableData[i].jobArea + '</td><td>' + tableData[i].companyName + '</td><td>' + tableData[i].salary + '</td><td>' + tableData[i].record + '</td><td>' + tableData[i].needWorkDate + '</td><td>' + tableData[i].pushDate + '</td><td><a href="' + tableData[i].jobUrl + '" target="_blank">查看</a></td></tr>';
+				console.info(html);
+				$("#put_data").append(html);
+			}
+
+		}
+		var laypage;
+		layui.use(['laypage', 'layer'], function() {
+			laypage = layui.laypage,
+				layer = layui.layer;
+			//总页数低于页码总数
+
+			loadAllData('java');
+
+		});
+		
+		
+		var sreach=function(){
+			var jobType=$("#jobType").val()==""?"java":$("#jobType").val();
+			console.info(jobType);
+			loadAllData(jobType);
+		}
+	</script>
+
+</html>
