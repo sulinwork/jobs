@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.gitignore
+.idea/jobs.iml
+.idea/vcs.xml
+.idea/workspace.xml
+job-common/target/
+job-reptile/target/
+jobs-etl/target/

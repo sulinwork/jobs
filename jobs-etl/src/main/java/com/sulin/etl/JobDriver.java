@@ -45,31 +45,11 @@ public class JobDriver {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            //
-
             String line = value.toString();
 
             String[] jobs = line.split(",");
             //0岗位名称 岗位中不含有关键字的全部过滤掉
-            if (jobs.length != 11 || !jobs
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    [0].toUpperCase().contains(fileName.toUpperCase())) {
+            if (jobs.length != 11 || !jobs[0].toUpperCase().contains(fileName.toUpperCase())) {
                 goNoise(value, context);
                 return;
             }
