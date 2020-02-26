@@ -1,6 +1,7 @@
 package com.sulin.etl;
 
 import com.sulin.common.HBaseUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,7 +28,9 @@ import java.util.List;
  * @time 2020-02-20
  * 岗位信息清洗
  */
+@Slf4j
 public class JobInfoCleanDriver {
+
 
     public static class JobInfoCleanMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
         @Override
@@ -39,32 +42,28 @@ public class JobInfoCleanDriver {
                 dataList.add(datum);
             }
             if (data.length != Const.DATA_LENGTH) {
-                saveNoiseData(value);
+                saveNoiseData(value, context);
+                log.error("data length != {}", Const.DATA_LENGTH);
                 return;
             }
             //对公司的人数规模清洗
             int minCompanySize = 0;
             int maxCompanySize = 0;
-            if (!"".equals(data[Const.COMPANY_SIZE_INDEX]) && !"null".equals(data[Const.COMPANY_SIZE_INDEX])) {//不是空进行数据切分
-                //System.out.println(line);
-                if (data[Const.COMPANY_SIZE_INDEX].indexOf("-") != -1) {
-                    String[] temp_spilt = data[Const.COMPANY_SIZE_INDEX].substring(0, data[Const.COMPANY_SIZE_INDEX].length() - 1).split("-");
-                    minCompanySize = Integer.parseInt(temp_spilt[0]);
-                    maxCompanySize = Integer.parseInt(temp_spilt[1]);
-                } else {
-                    //其他情况  少于50人  大于1000人
-                    if (data[Const.COMPANY_SIZE_INDEX].startsWith("少于")) {
-                        maxCompanySize = UtilTool.string2Int(data[Const.COMPANY_SIZE_INDEX]);
-                    } else {
-                        minCompanySize = UtilTool.string2Int(data[Const.COMPANY_SIZE_INDEX]);
-                    }
-                }
+            try {
+                Integer[] companySize = UtilTool.cleanCompanySize(data[Const.COMPANY_SIZE_INDEX]);
+                minCompanySize = companySize[0];
+                maxCompanySize = companySize[1];
+            } catch (Exception e) {
+                saveNoiseData(value, context);
+                log.error("clean company size error,data:{}", data[Const.COMPANY_SIZE_INDEX]);
+                return;
             }
             //工作地点
             String city = data[Const.CITY_INDEX].split("-")[0];
             //薪资 为空的数据为脏数据
             if ("".equals(data[Const.SALARY_INDEX])) {
-                saveNoiseData(value);
+                saveNoiseData(value, context);
+                log.error("salary is empty");
                 return;
             }
             //薪资单位不同意 需要清洗成统一的万/元
@@ -93,9 +92,8 @@ public class JobInfoCleanDriver {
          * 写出脏数据
          * @param text
          */
-        public void saveNoiseData(Text text) {
-            //TODO 写出脏数据
-            System.out.println(text.toString());
+        public void saveNoiseData(Text text, Context context) {
+            context.getCounter("JobDriver", "noise").increment(1L);
         }
     }
 
@@ -114,15 +112,15 @@ public class JobInfoCleanDriver {
             put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("edu"), Bytes.toBytes(jobs[Const.EDU_INDEX]));
             put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("number"), Bytes.toBytes(jobs[Const.NUMBER_INDEX]));
             put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("time"), Bytes.toBytes(jobs[Const.TIME_INDEX]));
-            put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("minSalary"), Bytes.toBytes(jobs[Const.SALARY_INDEX]));
-            put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("maxSalary"), Bytes.toBytes(jobs[Const.SALARY_INDEX + 1]));
+            put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("min_salary"), Bytes.toBytes(jobs[Const.SALARY_INDEX]));
+            put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("max_salary"), Bytes.toBytes(jobs[Const.SALARY_INDEX + 1]));
             put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("job_url"), Bytes.toBytes(jobs[Const.JOB_URL_INDEX + 1]));
             put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("job_info"), Bytes.toBytes(jobs[Const.JOB_INFO_INDEX + 1]));
             //公司信息
             put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("company_name"), Bytes.toBytes(jobs[Const.COMPANY_NAME_INDEX + 1]));
             put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("company_field"), Bytes.toBytes(jobs[Const.COMPANY_FIELD_INDEX + 1]));
-            put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("minCompanySize"), Bytes.toBytes(jobs[Const.COMPANY_SIZE_INDEX + 1]));
-            put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("maxCompanySize"), Bytes.toBytes(jobs[Const.COMPANY_SIZE_INDEX + 2]));
+            put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("min_company_size"), Bytes.toBytes(jobs[Const.COMPANY_SIZE_INDEX + 1]));
+            put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("max_company_size"), Bytes.toBytes(jobs[Const.COMPANY_SIZE_INDEX + 2]));
             put.addColumn(Bytes.toBytes("company"), Bytes.toBytes("company_type"), Bytes.toBytes(jobs[Const.COMPANY_TYPE_INDEX + 2]));
 
             //写入

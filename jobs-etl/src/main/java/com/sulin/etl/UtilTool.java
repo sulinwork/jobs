@@ -68,4 +68,31 @@ public class UtilTool {
         }
         return new Double[]{minSalary, maxSalary};
     }
+
+    /**
+     * 清洗公司规模
+     *
+     * @param companySize
+     * @return
+     */
+    public static Integer[] cleanCompanySize(String companySize) {
+        Integer minCompanySize = 0;
+        Integer maxCompanySize = 0;
+        //不是空进行数据切分
+        if (!"".equals(companySize) && !"null".equals(companySize)) {
+            if (companySize.indexOf("-") != -1) {
+                String[] temp_spilt = companySize.substring(0, companySize.length() - 1).split("-");
+                minCompanySize = Integer.parseInt(temp_spilt[0]);
+                maxCompanySize = Integer.parseInt(temp_spilt[1]);
+            } else {
+                //其他情况  少于50人  大于1000人
+                if (companySize.startsWith("少于")) {
+                    maxCompanySize = UtilTool.string2Int(companySize);
+                } else {
+                    minCompanySize = UtilTool.string2Int(companySize);
+                }
+            }
+        }
+        return new Integer[]{minCompanySize, maxCompanySize};
+    }
 }
