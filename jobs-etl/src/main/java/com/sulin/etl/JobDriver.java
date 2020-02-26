@@ -191,38 +191,38 @@ public class JobDriver {
         }
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        Configuration conf = new Configuration();
-        conf.set("hbase.zookeeper.quorum", "192.168.119.101,192.168.119.102,192.168.119.103");
-        conf.set("hbase.zookeeper.property.clientPort", "2181");
-        Job job = Job.getInstance(conf);
-
-        //设置驱动类
-        job.setJarByClass(JobDriver.class);
-        job.setMapperClass(JobMapper.class);
-
-        //设置map端输出数据类型
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(NullWritable.class);
-
-
-        //设置输入输出
-        job.setInputFormatClass(TextInputFormat.class);
-        TextInputFormat.setInputPaths(job, args[0]);
-
-//        job.setOutputFormatClass(TextOutputFormat.class);
-//        FileSystem fs = FileSystem.get(conf);
-//        Path path = new Path(args[1]);
-//        if (fs.exists(path)) {
-//            fs.delete(path, true);
-//        }
-        //TextOutputFormat.setOutputPath(job, path);
-        TableMapReduceUtil.initTableReducerJob("sulin:jobs", JobCleanReduce.class, job);
-        //设置脏数据  和  正常数据的保存的位置（多目录输出）
-//        MultipleOutputs.addNamedOutput(job, Const.NOISE_DATA_DIR_NAME, TextOutputFormat.class, Text.class, NullWritable.class);
-//        MultipleOutputs.addNamedOutput(job, Const.NORMAL_DATA_DIR_NAME, TextOutputFormat.class, Text.class, NullWritable.class);
-
-        System.exit(job.waitForCompletion(true) ? 1 : 0);
-    }
+//    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+//        Configuration conf = new Configuration();
+//        conf.set("hbase.zookeeper.quorum", "192.168.119.101,192.168.119.102,192.168.119.103");
+//        conf.set("hbase.zookeeper.property.clientPort", "2181");
+//        Job job = Job.getInstance(conf);
+//
+//        //设置驱动类
+//        job.setJarByClass(JobDriver.class);
+//        job.setMapperClass(JobMapper.class);
+//
+//        //设置map端输出数据类型
+//        job.setMapOutputKeyClass(Text.class);
+//        job.setMapOutputValueClass(NullWritable.class);
+//
+//
+//        //设置输入输出
+//        job.setInputFormatClass(TextInputFormat.class);
+//        TextInputFormat.setInputPaths(job, args[0]);
+//
+////        job.setOutputFormatClass(TextOutputFormat.class);
+////        FileSystem fs = FileSystem.get(conf);
+////        Path path = new Path(args[1]);
+////        if (fs.exists(path)) {
+////            fs.delete(path, true);
+////        }
+//        //TextOutputFormat.setOutputPath(job, path);
+//        TableMapReduceUtil.initTableReducerJob("sulin:jobs", JobCleanReduce.class, job);
+//        //设置脏数据  和  正常数据的保存的位置（多目录输出）
+////        MultipleOutputs.addNamedOutput(job, Const.NOISE_DATA_DIR_NAME, TextOutputFormat.class, Text.class, NullWritable.class);
+////        MultipleOutputs.addNamedOutput(job, Const.NORMAL_DATA_DIR_NAME, TextOutputFormat.class, Text.class, NullWritable.class);
+//
+//        System.exit(job.waitForCompletion(true) ? 1 : 0);
+//    }
 
 }

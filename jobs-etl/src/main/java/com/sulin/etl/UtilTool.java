@@ -68,17 +68,4 @@ public class UtilTool {
         }
         return new Double[]{minSalary, maxSalary};
     }
-
-    public static void main(String[] args) {
-        List<String> list = null;
-//        list.add("a");
-//        list.add("b");
-//        list.add("c");
-        String[] arrs = {"a", "b", "c"};
-        list = Arrays.asList(arrs);
-        System.out.println(list);
-        list.remove(1);
-        list.add(1, "d");
-        System.out.println(list);
-    }
 }
