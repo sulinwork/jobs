@@ -1,74 +1,94 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-	<head>
-		<meta charset="UTF-8">
-		<title>欢迎页面-X-admin2.2</title>
-		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-		<link rel="stylesheet" href="./css/font.css">
-		<link rel="stylesheet" href="./css/xadmin.css">
-		<script src="./lib/layui/layui.js" charset="utf-8"></script>
-		<script type="text/javascript" src="./js/xadmin.js"></script>
-		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-		<!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/xadmin.css">
+    <script src="lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/xadmin.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
 
-	<body>
-		<div class="layui-fluid">
-			<div class="layui-row layui-col-space15">
-				<div class="layui-col-md12">
-					<div class="layui-card">
-						<div class="layui-card-body ">
-							<blockquote class="layui-elem-quote">欢迎管理员：
-								<span class="x-red">Admin</span>！当前时间：2019-10-19
-						</div>
-					</div>
-				</div>
-				<div class="layui-col-md12">
-					<div class="layui-card">
-						<div class="layui-card-body">
-							<!--echars开始-->
-							<div id="java" style="width: 1200px;height:400px;"></div>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <blockquote class="layui-elem-quote">欢迎管理员：
+                        <span class="x-red">Admin</span>！当前时间：<span id="local_time"></span>
+                    </blockquote>
+                </div>
+                <script type="application/javascript">
+                    $(function () {
+                        let localTime = new Date();
+                        let localTimeStr = localTime.getFullYear() + "-" + (localTime.getMonth() + 1) + "-" + localTime.getDate();
+                        $("#local_time").text(localTimeStr);
+                    })
+                </script>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <!--echars开始-->
+                    <div id="job_pv" style="width: 1200px;height:400px;"></div>
+                    <form class="layui-form" style="position: absolute;left: 50px;top: 20px;">
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="contrller" class="my_keys" id="pv">
 
-						</div>
-						<div class="layui-card-body">
-							<div id="bigdata" style="width: 1200px;height:400px;"></div>
-						</div>
-						<div class="layui-card-body">
-							<div id="python" style="width: 1200px;height:400px;"></div>
-						</div>
-						<div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
-						<!--饼状图-->
-						<div class="layui-row">
-							<div id="education-java" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-							<div id="education-python" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-							<div id="education-bigdata" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-						</div>
-						<div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
-						<!--饼状图-->
-						<div class="layui-row">
-							<div id="year-java" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-							<div id="year-python" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-							<div id="year-bigdata" class="layui-col-md4" style="width: 400px;height:400px;"></div>
-						</div>
-						
-						<div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
-						<div class="layui-card-body">
-							<div id="industry" style="width: 1200px;height:500px;"></div>
-						</div>
-						
-					</div>
-				</div>
-				<script type="text/javascript" src="js/echarts.min.js"></script>
-				<script type="text/javascript" src="js/ehcars_city.js"></script>
-			</div>
-		</div>
-	</body>
+                            </select>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="layui-card-body">
+                    <div id="bigdata" style="width: 1200px;height:400px;"></div>
+                </div>
+                <div class="layui-card-body">
+                    <div id="python" style="width: 1200px;height:400px;"></div>
+                </div>
+                <div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
+                <!--饼状图-->
+                <div class="layui-row">
+                    <div id="education-java" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                    <div id="education-python" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                    <div id="education-bigdata" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                </div>
+                <div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
+                <!--饼状图-->
+                <div class="layui-row">
+                    <div id="year-java" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                    <div id="year-python" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                    <div id="year-bigdata" class="layui-col-md4" style="width: 400px;height:400px;"></div>
+                </div>
+
+                <div class="layui-card-body" style="width: 1200px;height:5px;background-color:#EEEEEE;"></div>
+                <div class="layui-card-body">
+                    <div id="industry" style="width: 1200px;height:500px;"></div>
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript" src="js/echarts.min.js"></script>
+<!--        <script type="text/javascript" src="js/ehcars_city.js"></script>-->
+        <script type="text/javascript" src="js/myjs.js"></script>
+        <script>
+            layui.use(['form'], null)
+        </script>
+    </div>
+</div>
+</body>
 
 </html>

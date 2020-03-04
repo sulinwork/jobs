@@ -1,4 +1,4 @@
-package com.sulin.jobweb.bean;
+package com.sulin.jobweb.common;
 
 import lombok.Data;
 
