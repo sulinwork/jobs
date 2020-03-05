@@ -77,7 +77,7 @@ public class JobService {
                     jobPv.setCount(count);
                     return jobPv;
                 }).sorted(Comparator.comparing(JobPv::getTime).reversed())
-                .limit(10)
+                .limit(7)
                 .sorted(Comparator.comparing(JobPv::getTime))
                 .forEach(x -> lineChart.addValue(x.getTime(), x.getCount()));
 
@@ -167,7 +167,7 @@ public class JobService {
                     jobSalary.setCount(count);
                     return jobSalary;
                 }).sorted(Comparator.comparing(JobSalary::getCount).reversed())
-                .limit(20)
+                .limit(15)
                 .forEach(x -> lineChart.addValue(x.getSalary(), x.getCount()));
         return lineChart;
     }

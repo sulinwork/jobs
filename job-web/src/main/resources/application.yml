@@ -4,9 +4,9 @@ spring:
     url: jdbc:mysql://192.168.229.101:3306/jobs?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
 
 
-#\u6253\u5370SQL\u8BED\u53E5
 logging:
   level:
     com:
