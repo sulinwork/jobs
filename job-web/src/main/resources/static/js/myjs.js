@@ -8,6 +8,8 @@ window.onload = function () {
     loadJobEchart('job_field', 'field', buildTreeOption('领域涉及与需求', 40));
 
     loadSpecialTreeEChart('job_year_salary', 'year-salary', buildSpecialTreeOption('工作经验与薪资'))
+
+    loadManyTreeEchart('job_edu_company_size', 'edu-company-size', buildTreeOption(''),'')
     const form = layui.form;
     $(document).ready(function () {
         form.on("select", function (data) {
@@ -24,6 +26,12 @@ window.onload = function () {
                 case 'job_edu':
                 case 'job_year':
                     loadPieData(loadEchartsElem(my_type), data.value, url);
+                    break;
+                case 'job_year_salary':
+                    loadSpecialTreeData(loadEchartsElem(my_type), data.value, url);
+                    break;
+                case 'job_edu_company_size':
+                    loadManyTreeEchart('job_edu_company_size', 'edu-company-size', buildTreeOption(''),data.value)
                     break;
             }
         })
@@ -85,8 +93,6 @@ let loadPieData = function (charts_elem, key, url) {
 
 let loadSpecialTreeData = function (elem, key, url) {
     $.get("/jobs/" + url + "?key=" + key, function (data) {
-        console.info("load data :")
-        console.info(data)
         if (data.code == 200) {
             elem.setOption({
                 xAxis: {
@@ -101,6 +107,117 @@ let loadSpecialTreeData = function (elem, key, url) {
                         data: data.data.max
                     }
                 ]
+            })
+        }
+    }, "json");
+}
+let loadManyTreeData = function (elem, key, url) {
+    $.get("/jobs/" + url + "?key=" + key, function (data) {
+        if (data.code == 200) {
+            console.info(data.data)
+            elem[0].setOption({
+                title:{
+                    show: true,
+                    text: data.data.one.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.one.xtitle,
+                    data: data.data.one.x
+                },
+                series: {
+                    name: data.data.one.ytitle,
+                    data: data.data.one.y
+                }
+            })
+            elem[1].setOption({
+                title:{
+                    show: true,
+                    text: data.data.two.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.two.xtitle,
+                    data: data.data.two.x
+                },
+                series: {
+                    name: data.data.two.ytitle,
+                    data: data.data.two.y
+                }
+            })
+            elem[2].setOption({
+                title:{
+                    show: true,
+                    text: data.data.three.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.three.xtitle,
+                    data: data.data.three.x
+                },
+                series: {
+                    name: data.data.three.ytitle,
+                    data: data.data.three.y
+                }
+            })
+            elem[3].setOption({
+                title:{
+                    show: true,
+                    text: data.data.four.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.four.xtitle,
+                    data: data.data.four.x
+                },
+                series: {
+                    name: data.data.four.ytitle,
+                    data: data.data.four.y
+                }
+            })
+            elem[4].setOption({
+                title:{
+                    show: true,
+                    text: data.data.five.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.five.xtitle,
+                    data: data.data.five.x
+                },
+                series: {
+                    name: data.data.five.ytitle,
+                    data: data.data.five.y
+                }
+            })
+            elem[5].setOption({
+                title:{
+                    show: true,
+                    text: data.data.six.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    name: data.data.six.xtitle,
+                    data: data.data.six.x
+                },
+                series: {
+                    name: data.data.six.ytitle,
+                    data: data.data.six.y
+                }
+            })
+            elem[6].setOption({
+                title:{
+                    show: true,
+                    text: data.data.seven.title,
+                    x: 'right'
+                },
+                xAxis: {
+                    data: data.data.seven.x
+                },
+                series: {
+                    name: data.data.seven.ytitle,
+                    data: data.data.seven.y
+                }
             })
         }
     }, "json");
@@ -125,6 +242,32 @@ let loadSpecialTreeEChart = function (id, url, option) {
     let job_charts = loadEchartsElem(id);
     job_charts.setOption(option);
     loadSpecialTreeData(job_charts, '', url);
+}
+
+let loadManyTreeEchart = function (id, url, option,key) {
+    const elems = new Array()
+    let job_charts_1 = loadEchartsElem(id + "_1");
+    job_charts_1.setOption(option);
+    elems[0] = job_charts_1
+    let job_charts_2 = loadEchartsElem(id + "_2");
+    job_charts_2.setOption(option);
+    elems[1] = job_charts_2
+    let job_charts_3 = loadEchartsElem(id + "_3");
+    job_charts_3.setOption(option);
+    elems[2] = job_charts_3
+    let job_charts_4 = loadEchartsElem(id + "_4");
+    job_charts_4.setOption(option);
+    elems[3] = job_charts_4
+    let job_charts_5 = loadEchartsElem(id + "_5");
+    job_charts_5.setOption(option);
+    elems[4] = job_charts_5
+    let job_charts_6 = loadEchartsElem(id + "_6");
+    job_charts_6.setOption(option);
+    elems[5] = job_charts_6
+    let job_charts_7 = loadEchartsElem(id + "_7");
+    job_charts_7.setOption(option);
+    elems[6] = job_charts_7
+    loadManyTreeData(elems, key, url);
 }
 /**
  * 加载 Echarts
@@ -356,11 +499,7 @@ let buildSpecialTreeOption = function (title) {
                 barWidth: '60%',
                 stack: '总量',
                 label: {
-                    show: true,
-                    position: "top",
-                    formatter: function (e) {
-                        console.info(e)
-                    }
+                    show: false
                 },
                 itemStyle: {
                     //通常情况下：

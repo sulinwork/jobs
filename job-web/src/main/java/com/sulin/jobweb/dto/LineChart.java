@@ -19,6 +19,8 @@ public class LineChart {
 
     private List<Integer> y = new ArrayList<>();
 
+    private String title;
+
 
     public void addValue(String x, Integer y) {
         this.x.add(x);

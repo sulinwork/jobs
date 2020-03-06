@@ -187,6 +187,7 @@ public class JobService {
         List<JobYear> jobYearList = jobYearMapper.selectByExample(example);
         List<PieChart> pieCharts = new ArrayList<>();
         jobYearList.stream()
+                .filter(x->!x.getYear().equals("无"))
                 .collect(Collectors.groupingBy(JobYear::getYear))
                 .forEach((k, v) -> {
                     int sum = v.stream().mapToInt(JobYear::getCount).sum();
@@ -257,6 +258,7 @@ public class JobService {
                 .collect(Collectors.groupingBy(JobEduCompanySize::getCompanySize))
                 .forEach((k, v) -> {
                     LineChart lineChart = new LineChart("学历", "数量");
+                    lineChart.setTitle(k+"人分布");
                     v.stream()
                             .collect(Collectors.groupingBy(JobEduCompanySize::getEdu))
                             .forEach((k1, v2) -> {
@@ -283,6 +285,7 @@ public class JobService {
         List<JobYearSalary> jobYearSalaryList = jobYearSalaryMapper.selectByExample(example);
         AxisTreeChart axisTreeChart = new AxisTreeChart("工资年限", "薪资范围");
         jobYearSalaryList.stream()
+                .filter(x->!x.getYear().equals("无"))
                 .collect(Collectors.groupingBy(JobYearSalary::getYear))
                 .forEach((k, v) -> {
                     int min = (int) v.stream().mapToInt(x -> x.getMinSalary().multiply(new BigDecimal(10)).intValue()).average().getAsDouble();
