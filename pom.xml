@@ -15,7 +15,7 @@
     </modules>
 
     <properties>
-        <zk.version>3.4.8</zk.version>
+        <zk.version>3.4.14</zk.version>
         <slf4j.version>1.7.26</slf4j.version>
         <kafka.version>2.3.0</kafka.version>
         <hbase.version>1.2.6</hbase.version>
